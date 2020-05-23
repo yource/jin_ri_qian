@@ -35,4 +35,8 @@ node_modules/
 Thumbs.db
 
 # Cordova
+cordova/platforms/
+cordova/plugins/
+cordova/www/
+
 
