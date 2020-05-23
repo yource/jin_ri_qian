@@ -1,0 +1,31 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-keyboard": {
+      "PACKAGE_NAME": "fun.yangxiang.todaytarget"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "fun.yangxiang.todaytarget"
+    },
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "fun.yangxiang.todaytarget"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "fun.yangxiang.todaytarget"
+    },
+    "cordova-plugin-wkwebview-file-xhr": {
+      "PACKAGE_NAME": "fun.yangxiang.todaytarget"
+    }
+  },
+  "dependent_plugins": {
+    "cordova-plugin-wkwebview-engine": {
+      "PACKAGE_NAME": "fun.yangxiang.todaytarget"
+    }
+  }
+}

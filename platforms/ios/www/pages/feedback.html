@@ -1,0 +1,92 @@
+<template>
+	<div class="page feedbackPage" data-name="feedback">
+		<div class="navbar">
+			<div class="navbar-bg"></div>
+			<div class="navbar-inner">
+				<div class="left">
+					<a href="#" class="link back">
+						<i class="icon icon-back"></i>
+					</a>
+				</div>
+				<div class="title">反馈</div>
+			</div>
+		</div>
+		<div class="page-content">
+			<div class="block">
+				<div class="row type">
+					<button id="type1" class="col button button-outline">建议</button>
+					<button id="type2" class="col button">错误</button>
+					<button id="type3" class="col button">求助</button>
+				</div>
+				<textarea class="textcon" id="textcon" placeholder="请输入反馈内容"></textarea>
+				<button @click="submit" class="button button-large button-fill">提交</button>
+			</div>
+		</div>
+	</div>
+</template>
+<style>
+	.feedbackPage .type .button {
+		font-size: 16px;
+		font-weight: normal;
+		color: #313133;
+		margin: 0;
+		width: 30%;
+		height: 36px;
+	}
+
+	.feedbackPage .type .button.button-outline {
+		color: var(--f7-button-text-color, var(--f7-theme-color));
+		border-width: 1px;
+	}
+
+	.textcon {
+		box-sizing: border-box;
+		width: 100%;
+		height: 187px;
+		line-height: 24px;
+		border: 1px solid #b9b9b9;
+		margin: 30px 0 50px;
+		padding: 5px;
+		border-radius: 5px;
+	}
+</style>
+<script>
+	return {
+		data: function() {
+			return {
+				products: this.$root.products,
+			};
+		},
+		methods: {
+			submit() {
+				var centent = $("#textcon").val();
+				if(!centent){
+					app.showTopTip("请输入反馈内容");
+					return;
+				}
+				var type = 0;
+				if($("#type1").hasClass("button-outline")){
+					type = 1;
+				}else if($("#type2").hasClass("button-outline")){
+					type = 2;
+				}else if($("#type3").hasClass("button-outline")){
+					type = 3;
+				}
+				var waitTime = Math.floor(Math.random() * 500);
+				app.preloader.show();
+				setTimeout(() => {
+					app.preloader.hide();
+					app.showTip("反馈成功", "success");
+					app.views.current.router.back();
+				}, waitTime)
+			}
+		},
+		on: {
+			pageAfterIn() {
+				$(".feedbackPage .type button").click(function() {
+					$(this).addClass("button-outline").siblings().removeClass("button-outline")
+				})
+			}
+		}
+	};
+</script>

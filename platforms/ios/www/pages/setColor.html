@@ -1,0 +1,120 @@
+<template>
+	<div class="page setColorPage" data-name="setColor">
+		<div class="navbar">
+			<div class="navbar-bg"></div>
+			<div class="navbar-inner">
+				<div class="left">
+					<a href="#" class="link back">
+						<i class="icon icon-back"></i>
+					</a>
+				</div>
+				<div class="title">主题色</div>
+			</div>
+		</div>
+		<div class="page-content">
+			<div class="list colorThemeList">
+				<ul>
+					{{#each colors}}
+					
+					<li @click="setTheme('{{this.code}}')">
+						<label  class="item-radio item-radio-icon-end item-content">
+							<input type="radio" name="color-radio"  {{#js_if "this.code == @root.theme" }} checked {{/js_if}} />
+							<i class="icon icon-radio"></i>
+							<div class="item-inner">
+								<div class="colorDot" style="background-color:{{this.color}}"></div>
+								<div class="item-title">{{this.name}}</div>
+							</div>
+						</label>
+					</li>
+					
+					{{/each}}
+				</ul>
+			</div>
+			<button @click="back" class="button button-large button-fill">返回</button>
+		</div>
+	</div>
+</template>
+<style>
+	.colorThemeList .colorDot{
+		width: 20px;
+		    height: 20px;
+		    margin-right: 10px;
+		    border-radius: 50%;
+		    border: 1px solid #fff;
+		    box-shadow: 0 0 3px #ababab;
+	}
+	.colorThemeList .item-title{
+		flex: 1;
+	}
+	.setColorPage .button-large{
+		width: 80%;
+		margin-left: 10%;
+	}
+</style>
+<script>
+	return {
+		data: function() {
+			return {
+				theme: this.$root.theme,
+				colors: [ {
+					name: "青色",
+					code: "theme color-theme-teal",
+					color: "#009688"
+				},{
+					name: "红色",
+					code: "theme color-theme-red",
+					color: "#ff3b30"
+				}, {
+					name: "绿色",
+					code: "theme color-theme-green",
+					color: "#4cd964"
+				}, {
+					name: "蓝色",
+					code: "theme color-theme-blue",
+					color: "#2196f3"
+				}, {
+					name: "粉色",
+					code: "theme color-theme-pink",
+					color: "#ff2d55"
+				}, {
+					name: "橙色",
+					code: "theme color-theme-orange",
+					color: "#ff9500"
+				}, {
+					name: "紫色",
+					code: "theme color-theme-purple",
+					color: "#9c27b0"
+				}, {
+					name: "深紫",
+					code: "theme color-theme-deeppurple",
+					color: "#673ab7"
+				}, {
+					name: "淡蓝",
+					code: "theme color-theme-lightblue",
+					color: "#5ac8fa"
+				}, {
+					name: "橘黄",
+					code: "theme color-theme-deeporange",
+					color: "#ff6b22"
+				}, 
+				// {
+				// 	name: "暗黑",
+				// 	code: "theme color-theme-red theme-dark",
+				// 	color: "#000"
+				// },
+				]
+			};
+		},
+		methods:{
+			setTheme:function(theme){
+				this.$root.theme = theme;
+				window.document.body.classList = "";
+				$("body").addClass(theme);
+				window.localStorage.setItem("theme",theme);
+			},
+			back:function(){
+				app.views.current.router.back();
+			}
+		}
+	};
+</script>

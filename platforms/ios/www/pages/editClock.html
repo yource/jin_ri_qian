@@ -1,0 +1,137 @@
+<template>
+	<div class="page clockDetailPage" data-name="clockDetailPage">
+		<div class="navbar">
+			<div class="navbar-bg"></div>
+			<div class="navbar-inner">
+				<div class="left">
+					<a href="#" class="link back">
+						<i class="icon icon-back"></i>
+					</a>
+				</div>
+				<div class="title">打卡详情</div>
+			</div>
+		</div>
+		<div class="page-content">
+			{{#with clock}}
+				<div class="name">{{name}}</div>
+				<div class="info">
+					<div class="right">
+						<div class="item">
+							<div class="label">描述：</div>
+							<div class="content">{{description}}</div>
+						</div>
+						<div class="item">
+							<div class="label">状态：</div>
+							<div class="content">{{#if done}}已完成{{else}}未完成{{/if}}</div>
+						</div>
+						<div class="item">
+							<div class="label">创建时间：</div>
+							<div class="content">{{startTime}}</div>
+						</div>
+						<div class="item">
+							<div class="label">打卡时间：</div>
+							<div class="content">{{#if done}}{{endTime}}{{else}}...{{/if}}</div>
+						</div>
+					</div>
+					<img src="{{img}}" class="mainImg">
+				</div>
+				<div style="padding: 20px;margin-bottom: 20px;">
+					<div style="line-height: 24px;">打卡备注：</div>
+					<textarea id="note" placeholder="{{description}}" style="width: 100%;height: 140px;padding: 5px;border: 1px solid #ccc;border-radius: 6px;background: #fff;margin-top: 10px;"></textarea>
+					<button @click="submit" class="button button-large button-fill" style="margin-top: 30px;">{{#if done}}保存{{else}}打卡{{/if}}</button>
+					<button @click="del" class="button button-large del-btn" style="margin-top: 20px;">删除</button>
+				</div>
+			{{/with}}
+		</div>
+	</div>
+</template>
+<style>
+	.clockDetailPage .name {
+		font-size: 18px;
+		line-height: 40px;
+		padding-left: 20px;
+		margin-top: 24px;
+	}
+
+	.clockDetailPage .info {
+		padding: 0 20px 15px;
+		display: flex;
+		border-bottom: 1px dashed #ccc;
+	}
+
+	.clockDetailPage .info img {
+		width: 80px;
+		height: 80px;
+		display: block;
+		border-radius: 8px;
+		box-shadow: 0 0 3px rgba(var(--f7-theme-color-rgb), 0.5);
+	}
+
+	.clockDetailPage .info .right {
+		flex: 1;
+		padding-right: 20px;
+	}
+
+	.clockDetailPage .info .right .item {
+		line-height: 30px;
+		display: flex;
+		font-size: 14px;
+	}
+
+	.clockDetailPage .info .right .item .label {
+		color: #666;
+		width: 75px;
+	}
+
+	.clockDetailPage .info .right .item .content {
+		flex: 1;
+	}
+</style>
+<script>
+	return {
+		data: function() {
+			return {
+				clock: curClock
+			};
+		},
+		methods: {
+			set_done(note) {
+				curClock.done = true;
+				curClock.note = note;
+				curClock.endTime = (new Date()).format("yyyy-MM-dd hh:mm");
+				this.$root.clocks[curClock.index] = curClock;
+				window.localStorage.setItem("clocks", JSON.stringify(clocks));
+				this.$router.back();
+			},
+			submit() {
+				var note = $("#note").val();
+				if (note && note.length > 1000) {
+					app.showTopTip("日志不能超过1000个字符");
+					return;
+				}
+				if (curClock.done) {
+					this.set_done(note);
+					app.showTip("保存成功", "success");
+				} else {
+					app.dialog.confirm("确定将此目标设为完成状态？", "打卡", () => {
+						this.set_done(note);
+						app.showTip("打卡成功", "success");
+					})
+				}
+			},
+			del() {
+				app.dialog.confirm("确定删除这条打卡记录？", "提示", () => {
+					this.$root.clocks.splice(curClock.index, 1);
+					window.localStorage.setItem("clocks", JSON.stringify(this.$root.clocks));
+					app.showTip("删除成功", "success");
+					this.$router.back();
+				})
+			}
+		},
+		on: {
+			pageAfterIn() {
+				$("#note").val(curClock.note);
+			}
+		}
+	};
+</script>

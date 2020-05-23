@@ -1,0 +1,116 @@
+<template>
+	<div class="page topicsPage" data-name="topics">
+		<div class="navbar">
+			<div class="navbar-bg"></div>
+			<div class="navbar-inner">
+				<div class="title">目标</div>
+			</div>
+		</div>
+		<div class="page-content" id="topicsPageContent">
+			<button type="button" @click="go_add" class="button addTopicButton"><i class="f7-icons">plus_circle</i><span> 新增目标</span></button>
+			{{#js_if "topics.length>0"}}
+			<div class="list links-list topicList">
+				<ul>
+					{{#each topics}}
+					<li>
+						<a @click="go_edit({{topicId}},'{{img}}','{{name}}','{{description}}')" href="#">
+							<div class="item-media">
+								<img src="{{img}}">
+							</div>
+							<div class="item-inner">
+							  <div class="item-title">
+							    <div class="item-header">{{name}}</div>
+							    <div class="item-explain">{{description}}</div>
+							  </div>
+							</div>
+						</a>
+					</li>
+					{{/each}}
+				</ul>
+			</div>
+			{{else}}
+			<img src="assets/images/empty.png" class="empty" style="margin-top: 0;border-top: 1px solid rgba(0,0,0,0.1);">
+			{{/js_if}}
+		</div>
+	</div>
+</template>
+<style>
+	.topicsPage .topicList{
+		margin-top:0;
+	}
+	.topicsPage .topicList a{
+		height: 90px;
+	}
+	.topicsPage .topicList a .item-media img{
+		width: 60px;
+		height:60px;
+	}
+	.topicsPage .topicList .item-explain{
+		font-size: 14px;
+		line-height: 20px;
+		color: #666;
+	}
+	.topicsPage .topicList .item-header{
+		font-size: 18px;
+		line-height: 40px;
+	}
+
+	.topicsPage .addTopicBtn a.link {
+		color: #fff;
+	}
+
+	.topicsPage .addTopicBtn a.link i.f7-icons {
+		font-size: 16px;
+	}
+	.addTopicButton{
+		background: #fff;
+		height: 60px;
+		    line-height: 60px;
+		    margin-top: 20px;
+		    border-top: 1px solid rgb(0,0,0,0.1);
+			border-radius: 0;
+		    font-size: 16px;
+	}
+	.addTopicButton i{
+		font-size: 22px;
+	}
+	.addTopicButton span,.addTopicButton i{
+		vertical-align: middle;
+	}
+</style>
+<script>
+	return {
+		data: function() {
+			return {
+				topics: this.$root.topics,
+				curTopic: {
+					// topicId:1,
+					// name: "早睡",
+					// img: "assets/topicImages/4.png",
+					// description: "今天做个早睡的乖宝宝"
+				}
+			};
+		},
+		methods: {
+			go_add(){
+				this.$router.navigate("/topics/addTopic/")
+			},
+			go_edit(id,img,name,desc){
+				curTopic = {
+					topicId:id,
+					img:img,
+					name:name,
+					description:desc
+				};
+				this.$router.navigate("/topics/editTopic/")
+			}
+		},
+		on: {
+			pageAfterIn() {
+				this.$setState({
+					topics: this.$root.topics
+				})
+			}
+		}
+	};
+</script>
