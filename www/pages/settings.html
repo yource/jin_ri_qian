@@ -1,0 +1,83 @@
+<template>
+	<div class="page settingsPage" data-name="settings">
+		<div class="navbar">
+			<div class="navbar-bg"></div>
+			<div class="navbar-inner">
+				<div class="title">设置</div>
+			</div>
+		</div>
+		<div class="page-content">
+			<div class="list links-list">
+				<ul>
+					<li>
+						<a href="/settings/setColor/">
+							<div class="item-media"><i class="f7-icons">paintbrush</i></div>
+							<div class="item-inner">
+						      <div class="item-title">
+						        <div class="item-header">主题色</div>
+						        <div class="item-explain">换个颜色，换种心情</div>
+						      </div>
+						    </div>
+						</a>
+					</li>
+					
+					<li>
+						<a href="/settings/setPassword/">
+							<div class="item-media"><i class="f7-icons">lock_shield</i></div>
+							<div class="item-inner">
+						      <div class="item-title">
+						        <div class="item-header">密码锁</div>
+						        <div class="item-explain">设置密码，保护隐私</div>
+						      </div>
+						    </div>
+						</a>
+					</li>
+					
+					<li>
+						<a href="/settings/feedback/">
+							<div class="item-media"><i class="f7-icons">capslock</i></div>
+							<div class="item-inner">
+					          <div class="item-title">
+					            <div class="item-header">意见反馈</div>
+					            <div class="item-explain">感谢您的反馈，让今日签越做越好</div>
+					          </div>
+					        </div>
+						</a>
+					</li>
+					
+				</ul>
+			</div>
+
+		</div>
+	</div>
+</template>
+<style>
+	.settingsPage .f7-icons{
+		color: var(--f7-theme-color);
+		font-size: 30px;
+	}
+	.settingsPage .list{
+		margin-top: 20px;
+	}
+	.settingsPage .list .item-explain{
+		font-size: 12px;
+		line-height: 20px;
+		color: #666;
+	}
+	.settingsPage .list .item-header{
+		font-size: 16px;
+		line-height: 40px;
+	}
+	.settingsPage .links-list a{
+		height: 80px;
+	}
+</style>
+<script>
+	return {
+		data: function() {
+			return {
+				products: [],
+			};
+		}
+	};
+</script>

@@ -1,0 +1,101 @@
+.device-cordova.device-ios {
+	height: 100vh;
+}
+
+:root {
+	--f7-page-transition-duration: 300ms;
+	--f7-page-bg-color: rgb(252, 252, 252);
+	--f7-navbar-text-color: #fff;
+	--f7-navbar-link-color: #fff;
+	--f7-fab-margin: 30px;
+}
+
+.theme {
+	--f7-navbar-bg-color: var(--f7-theme-color);
+	--f7-navbar-bg-color-rgb: var(--f7-theme-color-rgb);
+}
+
+.router-transition-f7-parallax-forward .page-current {
+	animation: f7-parallax-current-to-prev 250ms;
+}
+
+.router-transition-f7-parallax-forward .page-next {
+	animation: f7-parallax-next-to-current 250ms;
+}
+
+.router-transition-f7-parallax-backward .page-current {
+	animation: f7-parallax-current-to-next 250ms;
+}
+
+.router-transition-f7-parallax-backward .page-previous {
+	animation: f7-parallax-prev-to-current 250ms;
+}
+
+#mainbar {
+	transition: transform 0.3s !important;
+}
+
+#mainbar.hideBar {
+	transform: translate3d(0, 100%, 0) !important;
+}
+
+.toast.default {
+	background-color: rgba(24, 31, 41, 0.95);
+	font-size: 16px;
+}
+
+.toast.error {
+	background: #e32b00;
+	font-size: 16px;
+}
+
+.toast.success {
+	background-color: #25a014;
+	font-size: 16px;
+}
+
+.popup#passwordCover {
+	-webkit-backdrop-filter: saturate(40%) blur(5px);
+	backdrop-filter: saturate(40%) blur(5px);
+	background: none;
+}
+
+.popup#passwordCover .page {
+	background: rgba(255, 255, 255, 0.8);
+}
+
+.popup#passwordCover .section {
+	width: 100%;
+	height: 200px;
+	padding: 32px;
+	position: absolute;
+	top: 50%;
+	left: 0;
+	transform: translateY(-50%);
+	box-sizing: border-box;
+}
+
+.popup#passwordCover .section input {
+	height: 40px;
+	margin: 20px 0;
+	line-height: 40px;
+	padding-left: 6px;
+	font-size: 20px;
+	border: 1px solid #666;
+	border-radius: 5px;
+	width: 100%;
+}
+
+.popup#passwordCover .section .button {
+	margin-top: 100px;
+}
+
+img.empty {
+	width: 100%;
+}
+
+.button.del-btn {
+	background-color: #unset;
+	color: #333;
+	border: 1px solid #ccc;
+}

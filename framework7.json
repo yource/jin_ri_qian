@@ -1,0 +1,32 @@
+{
+  "cwd": "/Users/menusifu/Documents/yource/jin_ri_qian",
+  "type": [
+    "cordova"
+  ],
+  "name": "Today Target",
+  "pkg": "fun.yangxiang.todaytarget",
+  "framework": "core",
+  "template": "blank",
+  "bundler": false,
+  "cordova": {
+    "folder": "cordova",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "plugins": [
+      "cordova-plugin-statusbar",
+      "cordova-plugin-keyboard",
+      "cordova-plugin-splashscreen",
+      "cordova-plugin-wkwebview-engine"
+    ]
+  },
+  "theming": {
+    "customColor": false,
+    "color": "#007aff",
+    "darkTheme": false,
+    "iconFonts": true,
+    "fillBars": false
+  },
+  "customBuild": false
+}

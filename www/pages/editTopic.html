@@ -1,0 +1,166 @@
+<template>
+	<div class="page addTopicPage" data-name="addTopicPage">
+		<div class="navbar">
+			<div class="navbar-bg"></div>
+			<div class="navbar-inner">
+				<div class="left">
+					<a href="#" class="link back">
+						<i class="icon icon-back"></i>
+					</a>
+				</div>
+				<div class="title">编辑目标</div>
+			</div>
+		</div>
+		<div class="page-content">
+			<div class="block topicEditBlock">
+				<img src="{{img}}" class="curImg">
+				<div class="myInputForm">
+					<div class="title">标题：</div>
+					<input type="text" id="name" placeholder="请输入标题">
+				</div>
+				<div class="myInputForm">
+					<div class="title">描述：</div>
+					<input type="text" id="description" placeholder="请输入描述">
+				</div>
+				<div class="myInputForm">
+					<div class="title">选择图标：</div>
+					<div class="imgPicker">
+						<div class="imgCon">
+							{{#each images}}
+								<img @click="setImg('{{this}}')" src="{{this}}" class='{{#js_if "this==@root.img"}} active {{/js_if}}'>
+							{{/each}}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<button @click="submit" class="button button-large button-fill" style="width: 80%;margin-left:10%;">保存</button>
+			<button @click="del" class="button button-large del-btn" style="width: 80%;margin-left:10%;">删除</button>
+		</div>
+	</div>
+</template>
+<style>
+	.addTopicPage .block.topicEditBlock {
+		background-color: #fff;
+		margin-top: 20px;
+	}
+
+	.addTopicPage .myInputForm .title {
+		font-size: 14px;
+		line-height: 20px;
+	}
+
+	.addTopicPage .myInputForm input {
+		width: 100%;
+		border-bottom: 1px solid #ccc;
+		font-size: 16px;
+		height: 32px;
+		line-height: 32px;
+		margin-bottom: 20px;
+	}
+
+	.addTopicPage .curImg {
+		display: block;
+		height: 80px;
+		margin: 13px auto;
+	}
+
+	.addTopicPage .myInputForm .imgPicker .imgCon {
+		margin-top: 10px;
+		flex: 1;
+		height: 200px;
+		padding: 5px;
+		overflow-y: auto;
+		border: 1px solid #ccc;
+	}
+
+	.addTopicPage .myInputForm .imgPicker .imgCon img {
+		width: 36px;
+		height: 36px;
+		margin: 6px;
+		display: inline-block;
+	}
+
+	.addTopicPage .myInputForm .imgPicker .imgCon img.active {
+		border-radius: 4px;
+		box-shadow: 0 0 3px var(--f7-theme-color);
+	}
+	.addTopicPage .del-btn{
+		margin-top: 20px;
+		margin-bottom: 40px;
+	}
+</style>
+<script>
+	return {
+		data: function() {
+			return {
+				topicId: curTopic.topicId,
+				img: curTopic.img,
+				images: topicImages
+			};
+		},
+		methods: {
+			setImg(src) {
+				this.$setState({
+					img: src
+				})
+			},
+			submit() {
+				var name = $("#name").val();
+				if(!name){
+					app.showTopTip("请输入标题");
+					return;
+				}else if(name.length>6){
+					app.showTopTip("标题不能超过6个字符");
+					return;
+				}
+				var description = $("#description").val();
+				if(!description){
+					app.showTopTip("请输入描述");
+					return;
+				}else if(description.length>200){
+					app.showTopTip("描述不能超过200个字符");
+					return;
+				}
+				var topic = {
+					name: name,
+					description: description,
+					img: this.img,
+					topicId: curTopic.topicId
+				}
+				var topics = this.$root.topics.map((item) => {
+					if (item.topicId == curTopic.topicId) {
+						return topic;
+					} else {
+						return item;
+					}
+				});
+				this.$root.topics = topics;
+				window.localStorage.setItem("topics", JSON.stringify(topics));
+				app.showTip("保存成功", "success");
+				this.$router.back();
+			},
+			del() {
+				var idx = 0;
+				for (var i = 0; i < this.$root.topics.length; i++) {
+					if (this.$root.topics[i].topicId == curTopic.topicId) {
+						idx = i;
+						break;
+					}
+				}
+				app.dialog.confirm("确定删除此目标？", "提示", () => {
+					this.$root.topics.splice(idx,1);
+					window.localStorage.setItem("topics", JSON.stringify(this.$root.topics));
+					app.showTip("删除成功", "success");
+					this.$router.back();
+				})
+			}
+		},
+		on: {
+			pageAfterIn() {
+				$("#name").val(curTopic.name);
+				$("#description").val(curTopic.description);
+			}
+		}
+	};
+</script>

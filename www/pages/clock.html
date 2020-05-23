@@ -1,0 +1,272 @@
+<template>
+	<div class="page pageClock" data-name="clock">
+		<div class="navbar">
+			<div class="navbar-bg"></div>
+			<div class="navbar-inner">
+				<div class="title">打卡</div>
+			</div>
+		</div>
+		<div class="page-content">
+			<div style="height: 20px;"></div>
+			{{#js_if "clocks.length>0"}}
+			{{#each clocks}}
+			<div class="clockCard">
+				<div class="left">
+					<img src={{img}} />
+					<div class="date">{{date}}</div>
+					<div class="dot"></div>
+				</div>
+				<div class="right">
+					<div class="info" @click="go_edit({{@index}})">
+						<div class="triangle"></div>
+						<div class="top">
+							<div class="clockName">{{name}}</div>
+							{{#if done}}
+							<div class="done done-yes"><i class="f7-icons">checkmark_alt_circle</i></div>
+							{{else}}
+							<div class="done done-no">未完成</div>
+							{{/if}}
+						</div>
+						<div class="bottom">
+							{{#js_if "!!this.note"}}
+							{{note}}
+							{{else}}
+							{{description}}
+							{{/js_if}}
+						</div>
+					</div>
+				</div>
+			</div>
+			{{/each}}
+			{{else}}
+			<img class="empty" src="assets/images/empty.png"/>
+			<p style="text-align: center;color: #999;">您还没有打卡记录，通过右下角"+"按钮新建</p>
+			{{/js_if}}
+			<div class="fab fab-right-bottom">
+				<a @click="open_sheet">
+					<i class="icon f7-icons">plus</i>
+				</a>
+			</div>
+		</div>
+		<div class="sheet-modal clock-sheet" id="clock-sheet">
+			<div class="toolbar">
+			      <div class="toolbar-inner">
+			        <div class="left"><a class="link sheet-close">取消</a></div>
+					<div class="title" style="color: #9b9b9e;">选择打卡目标</div>
+			        <div class="right"><a class="link" @click="add_clock">确定</a></div>
+			      </div>
+			    </div>
+			<div class="sheet-modal-inner">
+				<div class="list chooseTopicList">
+					<ul>
+						{{#each topics}}
+						<li @click="choose_topic({{@index}})">
+							<label  class="item-radio item-radio-icon-end item-content">
+								<input type="radio" name="color-radio"  {{#js_if "@index === @root.chooseTopicIdx" }} checked {{/js_if}} />
+								<i class="icon icon-radio"></i>
+								<div class="item-inner">
+									<img src="{{img}}">
+									<div class="item-title"><span style="font-size: 15px;">{{name}}</span><span style="font-size: 12px;color: #666;padding-left: 8px;">({{description}})</span></div>
+								</div>
+							</label>
+						</li>
+						{{/each}}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+<style>
+	.pageClock .clockCard{
+		display: flex;
+		overflow: hidden;
+	}
+	.pageClock .clockCard .left{
+		width: 100px;
+		position: relative;
+		text-align: center;
+		padding-top: 10px;
+		padding-bottom: 20px;
+		border-right: 1px solid rgba(0,0,0,0.1);
+	}
+	.pageClock .clockCard .left img{
+		width: 72px;
+		height:72px;
+	}
+	.pageClock .clockCard  .left .date{
+		font-size: 12px;
+		line-height: 22px;
+		color: #666;
+	}
+	.pageClock .clockCard .left .dot{
+		position: absolute;
+		top: 38px;
+		right: -10px;
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background: #e4e4e4;
+		border: 5px solid var(--f7-page-bg-color);
+	}
+	.clock-sheet .sheet-modal-inner{
+		overflow-y: auto;
+	}
+	.pageClock .clockCard .right{
+		padding-left: 20px;
+		flex: 1;
+		padding-right: 14px;
+		padding-top: 10px;
+		padding-bottom: 24px;
+	}
+	.pageClock .clockCard .right .info{
+		position: relative;
+		min-height: 84px;
+		box-shadow: 0 2px 10px #cecece;
+		border-radius: 6px;
+		background-color: #fff;
+		padding: 0 10px 14px;
+	}
+	.pageClock .clockCard .right .info .triangle{
+		width: 8px;
+		height: 8px;
+		background-color: #fff;
+		position: absolute;
+		top: 34px;
+		left:-4px;
+		transform: rotate(45deg);
+	}
+	.pageClock .clockCard .right .info .top{
+		height: 50px;
+		line-height: 50px;
+		display: flex;
+	}
+	.pageClock .clockCard .right .info .clockName{
+		flex: 1;
+		font-size: 18px;
+	}
+	.pageClock .clockCard .right .info .done-no{
+		color: #999;
+		font-size: 12px;
+	}
+	.pageClock .clockCard .right .info .done-yes i.f7-icons{
+		color: var(--f7-theme-color);
+		vertical-align: middle;
+	}
+	.chooseTopicList{
+		margin-top: 0;
+	}
+	.chooseTopicList img{
+		width: 30px;
+		height: 30px;
+	}
+	.chooseTopicList .item-title{
+		flex: 1;
+		padding-left: 15px;
+	}
+</style>
+<script>
+	return {
+		data: function() {
+			return {
+				clocks: this.$root.clocks,
+				topics: [],
+				chooseTopicIdx: false,
+				curClock:{}
+			};
+		},
+		methods: {
+			open_sheet(){
+				if(this.$root.topics.length==0){
+					app.showTopTip("没有可添加的目标，请先创建目标");
+				}else{
+					this.clockSheet.open();
+				}
+			},
+			choose_topic(idx){
+				this.$setState({
+					chooseTopicIdx:idx
+				})
+			},
+			add_clock(){
+				if(this.chooseTopicIdx===false){
+					app.showTopTip("请选择目标");
+				}else{
+					this.clockSheet.close();
+					var date = new Date();
+					var newClock = Object.assign({},this.topics[this.chooseTopicIdx],{
+						date: date.format("yyyy-MM-dd"),
+						startTime: date.format("yyyy-MM-dd hh:mm"),
+						done:false,
+						endTime:"",
+						note:""
+					})
+					this.$root.clocks.unshift(newClock);
+					window.localStorage.setItem("clocks",JSON.stringify(this.$root.clocks));
+					this.$setState({
+						clocks: this.$root.clocks
+					})
+				}
+			},
+			go_edit(idx){
+				curClock = Object.assign({},this.clocks[idx],{
+					index: idx
+				});
+				this.$router.navigate("/clock/editClock/");
+			},
+			remove_clock(idx){
+				this.$root.clocks.splice(idx,1);
+				window.localStorage.setItem("clocks",JSON.stringify(this.$root.clocks));
+				this.$setState({
+					clocks: this.$root.clocks
+				})
+			}
+		},
+		on: {
+			pageInit: function() {
+				app.initPasswordCover = function() {
+					if (!app.passwordCover) {
+						app.passwordCover = app.popup.create({
+							el: "#passwordCover",
+							closeByBackdropClick: false,
+							closeOnEscape: false
+						});
+					}
+					if (app.data.needPassword) {
+						$("#passwordCover input").val("");
+						app.passwordCover.open(false);
+					}
+				};
+				app.initPasswordCover();
+			},
+			pageAfterIn(){
+				this.$setState({
+					clocks: this.$root.clocks,
+					topics: this.$root.topics
+				});
+				var that = this;
+				if(!this.clockSheet){
+					this.clockSheet = app.sheet.create({
+						el:"#clock-sheet",
+						backdrop: true,
+						closeByBackdropClick:true,
+						on:{
+							closed(){
+								that.$setState({
+									chooseTopicIdx:false
+								})
+							}
+						}
+					})
+				}
+			},
+			pageTabShow() {
+				this.$setState({
+					clocks: this.$root.clocks,
+					topics: this.$root.topics
+				});
+			}
+		}
+
+	};
+</script>

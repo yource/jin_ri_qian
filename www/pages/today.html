@@ -1,0 +1,191 @@
+<template>
+	<div class="page todayPage" data-name="today">
+		<div class="navbar">
+			<div class="navbar-bg"></div>
+			<div class="navbar-inner">
+				<div class="title">今日</div>
+			</div>
+		</div>
+		<div class="page-content">
+			<div class="dateLabel">- {{todayDateLabel}} -</div>
+			<div class="top">
+				<div class="sentence sentence1" @click="remove_sentence(1)">
+					<span>每天给自己定一个小目标，完成了就来打卡！</span>
+					<i class="f7-icons">xmark_circle_fill</i>
+				</div>
+				<div class="sentence sentence2">
+					<span>您还没设置目标，快去定一个吧 ( •̆ ᵕ •̆ )◞♡ </span>
+					<i class="f7-icons" @click="remove_sentence(2)">xmark_circle_fill</i>
+				</div>
+			</div>
+
+			<div class="topicCard">
+				<div class="topic">
+					<img src="../assets/topicImages/default.png" class="topicImgDefault">
+				</div>
+				<div class="buttonCon">
+					<button class="button button-fill" @click="go_choose">选择目标</button>
+					<!-- <button class="button button-fill button-round">随机抽取</button> -->
+				</div>
+			</div>
+
+
+			<p><a class="button sheet-open" href="#" data-sheet=".chooseTopic">Swipe To Close</a></p>
+			<div class="sheet-modal chooseTopic" style="height:auto; --f7-sheet-bg-color: #fff;">
+				<div class="sheet-modal-inner">
+					<div class="page-content">
+						<div class="block-title block-title-large">Hello!</div>
+						<div class="block">
+							<p><b>Swipe me down to close</b></p>
+							<p>Eaque maiores ducimus, impedit unde culpa qui...</p>
+						</div>
+					</div>
+				</div>
+				<div class="toolbar toolbar-bottom">
+					<div class="toolbar-inner">
+						<div class="left"></div>
+						<div class="right"><a class="link sheet-close" href="#">Done</a></div>
+					</div>
+				</div>
+			</div>
+
+			{{#js_if "todaySetted"}}
+				<div class="unset">
+
+				</div>
+				{{else}}
+					<div class="setted">
+
+					</div>
+			{{/js_if}}
+
+			{{#each @root.topics}}
+				<div>{{name}}</div>
+				<img src="{{img}}" alt="" style="width: 50px;">
+			{{/each}}
+
+
+		</div>
+	</div>
+</template>
+<style>
+	.todayPage .top {
+		padding: 14px;
+		height: 100px;
+	}
+
+	.todayPage .dateLabel {
+		font-size: 12px;
+		color: #999;
+		text-align: center;
+		padding-top: 14px;
+	}
+
+	.todayPage .top .sentence {
+		font-size: 14px;
+		animation: sentenceShow 1s;
+		transform: translateY(30%);
+		animation-fill-mode: forwards;
+		opacity: 0;
+		line-height: 30px;
+		height: 30px;
+		border-radius: 15px;
+		background-color: var(--f7-list-bg-color);
+		padding: 0 12px;
+		box-shadow: 0px 1px 3px rgba(var(--f7-theme-color-rgb), 0.5);
+		margin-bottom: 14px;
+		display: flex;
+		align-items: center;
+	}
+
+	.todayPage .top .sentence .f7-icons {
+		font-size: 20px;
+		display: inline-block;
+		color: rgba(var(--f7-theme-color-rgb), 0.5);
+	}
+
+	.todayPage .top .sentence span {
+		flex: 1;
+	}
+
+	.todayPage .top .sentence.sentence2 {
+		animation-delay: 1.5s;
+	}
+
+	.todayPage .top .sentence.sentence3 {
+		animation-delay: 3s;
+	}
+
+	@keyframes sentenceShow {
+		from {
+			transform: translateY(30%);
+			opacity: 0;
+		}
+
+		to {
+			transform: translateY(0);
+			opacity: 1;
+		}
+	}
+
+	.topicCard {
+		margin-left: 10%;
+		width: 80%;
+		height: calc(80vh - 200px);
+		background: #fff;
+		box-shadow: 0 2px 10px #ccc;
+		border-radius: 10px;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.topic {
+		flex: 1;
+		width: 100%;
+		padding-top: 20px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.topicImgDefault {
+		width: 120px;
+		height: 120px;
+		display: block;
+	}
+
+	.topicCard .buttonCon {
+		padding: 20px;
+	}
+
+	.topicCard .buttonCon .button {
+		font-size: 16px;
+		height: 40px;
+	}
+</style>
+<script>
+	return {
+		data: function() {
+			return {
+				todaySetted: this.$root.todaySetted,
+				topics: this.$root.topics,
+				topicHistoryList: this.$root.topicHistoryList,
+				todayDateLabel: this.$root.todayDateLabel,
+				todayTopic: this.$root.todayTopic,
+				todayUsed: this.$root.todayUsed
+			};
+		},
+		mounted() {
+			var that = this;
+		},
+		methods: {
+			remove_sentence(no) {
+				$(".todayPage .top .sentence" + no).remove()
+			},
+			go_choose() {
+				app.views.current.router.navigate("")
+			}
+		}
+
+	};
+</script>
